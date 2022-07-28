@@ -25,7 +25,10 @@ jobs:
       - name: Install composer dependencies
         uses: ramsey/composer-install@v1
 
-      # - name: Commit changes
-      #   uses: stefanzweifel/git-auto-commit-action@v4
-      #   with:
-      #     commit_message: Update
+      - name: Update composer dependencies
+        uses: kawax/composer-update-action@v3.0.0
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Update
