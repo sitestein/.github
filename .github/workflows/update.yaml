@@ -25,6 +25,9 @@ jobs:
       - name: Copy .env
         run: cp $GITHUB_WORKSPACE/.env.example $GITHUB_WORKSPACE/.env
 
+      - name: Install Sitestein CLI
+        run: composer global install sitestein/cli
+
       - name: Install composer dependencies
         uses: ramsey/composer-install@v1
 
@@ -33,6 +36,9 @@ jobs:
 
       - name: Update composer dependencies
         run: composer update
+
+      - name: Publish Sitestein
+        run: sitestein publish
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
