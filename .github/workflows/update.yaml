@@ -26,6 +26,7 @@ jobs:
         run: cp $GITHUB_WORKSPACE/.env.example $GITHUB_WORKSPACE/.env
 
       - name: Install Sitestein CLI
+        run: composer global config repositories.cli vcs https://github.com/sitestein/cli
         run: composer global require sitestein/cli
 
       - name: Install composer dependencies
