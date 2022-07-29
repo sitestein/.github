@@ -1,0 +1,39 @@
+name: Update
+
+on:
+  workflow_call:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Add auth.json
+        run: echo '${{ secrets.COMPOSER_AUTH_JSON }}' > $HOME/.composer/auth.json
+
+      - name: Copy .env
+        run: cp $GITHUB_WORKSPACE/.env.example $GITHUB_WORKSPACE/.env
+
+      - name: Install Sitestein CLI
+        run: composer global config repositories.cli vcs https://github.com/sitestein/cli && composer global require sitestein/cli:dev-master
+
+      - name: Install composer dependencies
+        uses: ramsey/composer-install@v1
+
+      # Steps
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Update
