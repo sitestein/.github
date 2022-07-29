@@ -1,4 +1,4 @@
-name: Update
+name: Generic
 
 on:
   workflow_call:
