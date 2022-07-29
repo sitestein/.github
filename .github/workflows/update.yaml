@@ -28,9 +28,6 @@ jobs:
       - name: Install Sitestein CLI
         run: composer global config repositories.cli vcs https://github.com/sitestein/cli && composer global require sitestein/cli:dev-master
 
-      - name: Install composer dependencies
-        uses: ramsey/composer-install@v1
-
       - name: Update Statamic version
         run: composer require statamic/cms "^3.3"
 
