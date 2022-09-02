@@ -28,11 +28,8 @@ jobs:
       - name: Install Sitestein CLI
         run: composer global config repositories.cli vcs https://github.com/sitestein/cli && composer global require sitestein/cli:dev-master
 
-      - name: Update Statamic version
-        run: composer require statamic/cms "^3.3"
-
-      - name: Update composer dependencies
-        run: composer update
+      - name: Update/bump dependencies
+        run: composer bump && composer update
 
       - name: Publish Sitestein
         run: sitestein publish
