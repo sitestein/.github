@@ -28,7 +28,7 @@ jobs:
       - name: Install Sitestein CLI
         run: composer global config repositories.cli vcs https://github.com/sitestein/cli && composer global require sitestein/cli:dev-master
 
-      - name: Update/bump dependencies
+      - name: Update dependencies
         run: composer bump && composer update
 
       - name: Publish Sitestein
