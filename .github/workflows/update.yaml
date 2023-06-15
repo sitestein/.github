@@ -49,4 +49,4 @@ jobs:
         if: github.event.inputs.deploy == 'true'
         uses: Glennmen/ploi-deploy-action@v1.2.0
         with:
-          webhook_url: ${{ github.event.inputs.deploy_url }}
+          webhook_url: github.event.inputs.deploy_url
