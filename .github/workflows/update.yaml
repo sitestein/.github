@@ -1,51 +1,51 @@
 name: Update
 
 on:
-  workflow_dispatch:
-    inputs:
-      deploy:
-        description: 'Deploy'
-        required: false
-        default: 'false'
+  workflow_dispatch
+
 
 jobs:
   update:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.1'
-          coverage: none
+      - name: Deploy
+        if: github.event.inputs.deploy == 'true'
+        run: echo 'TEST'
 
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.head_ref }}
+      # - name: Setup PHP
+      #   uses: shivammathur/setup-php@v2
+      #   with:
+      #     php-version: '8.1'
+      #     coverage: none
 
-      - name: Add auth.json
-        run: echo '${{ secrets.COMPOSER_AUTH_JSON }}' > $HOME/.composer/auth.json
+      # - name: Checkout code
+      #   uses: actions/checkout@v2
+      #   with:
+      #     ref: ${{ github.head_ref }}
 
-      - name: Copy .env
-        run: cp $GITHUB_WORKSPACE/.env.example $GITHUB_WORKSPACE/.env
+      # - name: Add auth.json
+      #   run: echo '${{ secrets.COMPOSER_AUTH_JSON }}' > $HOME/.composer/auth.json
 
-      - name: Install Sitestein CLI
-        run: composer global config repositories.cli vcs https://github.com/sitestein/cli && composer global require sitestein/cli:^1.0
+      # - name: Copy .env
+      #   run: cp $GITHUB_WORKSPACE/.env.example $GITHUB_WORKSPACE/.env
 
-      - name: Install/update dependencies
-        run: composer install && composer update
+      # - name: Install Sitestein CLI
+      #   run: composer global config repositories.cli vcs https://github.com/sitestein/cli && composer global require sitestein/cli:^1.0
 
-      - name: Bump dependencies
-        run: composer bump && composer update
+      # - name: Install/update dependencies
+      #   run: composer install && composer update
 
-      - name: Publish Sitestein
-        run: sitestein publish
+      # - name: Bump dependencies
+      #   run: composer bump && composer update
 
-      - name: Rebuild
-        run: php please rebuild:content
+      # - name: Publish Sitestein
+      #   run: sitestein publish
 
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Update
+      # - name: Rebuild
+      #   run: php please rebuild:content
+
+      # - name: Commit changes
+      #   uses: stefanzweifel/git-auto-commit-action@v4
+      #   with:
+      #     commit_message: Update
