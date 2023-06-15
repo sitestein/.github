@@ -8,48 +8,45 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Test
-        run: echo ${{ github.event.inputs.deploy_url }}
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
 
-      # - name: Setup PHP
-      #   uses: shivammathur/setup-php@v2
-      #   with:
-      #     php-version: '8.1'
-      #     coverage: none
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
 
-      # - name: Checkout code
-      #   uses: actions/checkout@v2
-      #   with:
-      #     ref: ${{ github.head_ref }}
+      - name: Add auth.json
+        run: echo '${{ secrets.COMPOSER_AUTH_JSON }}' > $HOME/.composer/auth.json
 
-      # - name: Add auth.json
-      #   run: echo '${{ secrets.COMPOSER_AUTH_JSON }}' > $HOME/.composer/auth.json
+      - name: Copy .env
+        run: cp $GITHUB_WORKSPACE/.env.example $GITHUB_WORKSPACE/.env
 
-      # - name: Copy .env
-      #   run: cp $GITHUB_WORKSPACE/.env.example $GITHUB_WORKSPACE/.env
+      - name: Install Sitestein CLI
+        run: composer global config repositories.cli vcs https://github.com/sitestein/cli && composer global require sitestein/cli:^1.0
 
-      # - name: Install Sitestein CLI
-      #   run: composer global config repositories.cli vcs https://github.com/sitestein/cli && composer global require sitestein/cli:^1.0
+      - name: Install/update dependencies
+        run: composer install && composer update
 
-      # - name: Install/update dependencies
-      #   run: composer install && composer update
+      - name: Bump dependencies
+        run: composer bump && composer update
 
-      # - name: Bump dependencies
-      #   run: composer bump && composer update
+      - name: Publish Sitestein
+        run: sitestein publish
 
-      # - name: Publish Sitestein
-      #   run: sitestein publish
+      - name: Rebuild
+        run: php please rebuild:content
 
-      # - name: Rebuild
-      #   run: php please rebuild:content
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Update
 
-      # - name: Commit changes
-      #   uses: stefanzweifel/git-auto-commit-action@v4
-      #   with:
-      #     commit_message: Update
-
-      # - name: Deploy
-      #   if: github.event.inputs.deploy == 'true'
-      #   uses: Glennmen/ploi-deploy-action@v1.2.0
-      #   with:
-      #     webhook_url: ${{ github.event.inputs.deploy_url }}
+      - name: Deploy
+        if: github.event.inputs.deploy == 'true'
+        uses: Glennmen/ploi-deploy-action@v1.2.0
+        with:
+          webhook_url: ${{ github.event.inputs.deploy_url }}
