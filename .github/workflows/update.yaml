@@ -1,7 +1,12 @@
 name: Update
 
 on:
-  workflow_call:
+  workflow_dispatch:
+    inputs:
+      deploy:
+        description: 'Deploy'
+        required: false
+        default: 'false'
 
 jobs:
   update:
