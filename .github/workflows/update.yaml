@@ -45,7 +45,7 @@ jobs:
         with:
           commit_message: Update
 
-      - name: Deploy
+      - name: Action
         if: github.event.inputs.albert_action == 'true'
         uses: fjogeleit/http-request-action@v1
         with:
