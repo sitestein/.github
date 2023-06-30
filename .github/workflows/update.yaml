@@ -46,7 +46,8 @@ jobs:
           commit_message: Update
 
       - name: Deploy
-        if: github.event.inputs.deploy == 'true'
-        uses: Glennmen/ploi-deploy-action@v1.2.0
+        if: github.event.inputs.albert_action == 'true'
+        uses: fjogeleit/http-request-action@v1
         with:
-          webhook_url: ${{ github.event.inputs.deploy_url }}
+          url: ${{ github.event.inputs.albert_action_url }}
+          method: 'POST'
