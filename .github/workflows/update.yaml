@@ -29,7 +29,7 @@ jobs:
         run: composer global config repositories.cli vcs https://github.com/sitestein/cli && composer global require sitestein/cli:^1.0
 
       - name: Install/update dependencies
-        run: composer install && composer update
+        run: composer update
 
       - name: Bump dependencies
         run: composer bump && composer update
